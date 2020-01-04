@@ -117,3 +117,30 @@
   margin: 2% auto;
   border-radius: 20px;
 }
+
+.Ketchup {
+  width: 80%;
+  height: 1%;
+  background: red;
+  margin: auto;
+}
+
+.Mustard {
+  width: 80%;
+  height: 1%;
+  background: #ffdb58;
+  margin: auto;
+}
+.Mayo {
+  width: 80%;
+  height: 1%;
+  background: #fffae0;
+  margin: auto;
+}
+
+.Relish {
+  width: 80%;
+  height: 1%;
+  background: #8cc586;
+  margin: auto;
+}
