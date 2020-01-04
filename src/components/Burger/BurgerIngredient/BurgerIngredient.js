@@ -22,7 +22,7 @@ class BurgerIngredient extends Component {
       case "cheese":
         ingredient = <div className={classes.Cheese}></div>;
         break;
-      case "salad":
+      case "lettuce":
         ingredient = <div className={classes.Salad}></div>;
         break;
       case "tomato":
@@ -31,6 +31,16 @@ class BurgerIngredient extends Component {
       case "bacon":
         ingredient = <div className={classes.Bacon}></div>;
         break;
+      case "ketchup":
+        ingredient = <div className={classes.Ketchup}></div>;
+        break;
+      case "mustard":
+        ingredient = <div className={classes.Mustard}></div>;
+        break;
+      case "mayo":
+        ingredient = <div className={classes.Mayo}></div>;
+        break;
+
       default:
         ingredient = null;
     }
