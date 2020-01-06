@@ -3,10 +3,10 @@ import React from "react";
 export default function OrderSummary(props) {
   const ingredientSummary = Object.keys(props.ingredients).map(igKey => {
     return (
-      <li key={igKey}>
+      <div key={igKey}>
         <span style={{ textTransform: "capitalize" }}>{igKey}</span>:{" "}
         {props.ingredients[igKey]}
-      </li>
+      </div>
     );
   });
   return (
@@ -14,7 +14,10 @@ export default function OrderSummary(props) {
       <h3>Your Order</h3>
       <div>A delicious burger with the following ingredients:</div>
       <ul>{ingredientSummary}</ul>
+      <p>Total Price: {props.prices.toFixed(2)}</p>
       <p>Continue to Checkout?</p>
+      <button>Cancel</button>
+      <button>Continue</button>
     </React.Fragment>
   );
 }
