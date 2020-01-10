@@ -7,10 +7,7 @@ const controls = [
   { label: "Tomato", type: "tomato" },
   { label: "Cheese", type: "cheese" },
   { label: "Bacon", type: "bacon" },
-  { label: "Meat", type: "meat" },
-  { label: "Ketchup", type: "ketchup" },
-  { label: "Mustard", type: "mustard" },
-  { label: "Mayo", type: "mayo" }
+  { label: "Meat", type: "meat" }
 ];
 
 const BuildControls = props => (
@@ -28,6 +25,7 @@ const BuildControls = props => (
         pur
       />
     ))}
+    <br />
     <button
       className={classes.OrderButton}
       disabled={!props.purchaseable}

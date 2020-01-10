@@ -10,10 +10,7 @@ const INGREDIENT_PRICES = {
   cheese: 0.4,
   meat: 1.3,
   bacon: 0.7,
-  tomato: 0.5,
-  ketchup: 0,
-  mustard: 0,
-  mayo: 0
+  tomato: 0.5
 };
 
 export default class BurgerBuilder extends Component {
@@ -22,9 +19,7 @@ export default class BurgerBuilder extends Component {
       tomato: 0,
       lettuce: 0,
       bacon: 0,
-      ketchup: 0,
-      mustard: 0,
-      mayo: 0,
+
       cheese: 0,
       meat: 0
     },
