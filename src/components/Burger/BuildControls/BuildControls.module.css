@@ -7,8 +7,8 @@
   box-shadow: 0 2px 1px #ccc;
   margin: auto;
   padding: 20px 0;
-  position: absolute;
-  bottom: 0;
+  /* position: absolute;
+  bottom: 0; */
 }
 
 .OrderButton {
