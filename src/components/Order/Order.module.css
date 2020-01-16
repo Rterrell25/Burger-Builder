@@ -1,5 +1,6 @@
 .Order {
-  width: 100%;
+  width: 85%;
+  padding: 10px;
   border: 1px solid #ccc;
   box-shadow: 0 2px 3px #ccc;
   margin: 10px auto;
