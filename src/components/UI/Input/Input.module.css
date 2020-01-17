@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+.Label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
 .inputElement {
   outline: none;
   border: 1px solid #ccc;
@@ -23,4 +29,9 @@
 .Invalid {
   border: 1px solid red;
   background-color: #fda49a;
+}
+
+.validationError {
+  color: red;
+  margin: 5px 0;
 }
