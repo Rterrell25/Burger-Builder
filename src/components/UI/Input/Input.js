@@ -5,10 +5,17 @@ export default function Input(props) {
   let inputElement = null;
   const inputClasses = [classes.inputElement];
 
-  if (props.invalid && props.shouldValidate) {
+  if (props.invalid && props.shouldValidate && props.touched) {
     inputClasses.push(classes.Invalid);
   }
-
+  let validationError = null;
+  if (props.invalid && props.shouldValidate && props.touched) {
+    validationError = (
+      <p className={classes.validationError}>
+        Please enter a valid {props.elementConfig.placeholder}
+      </p>
+    );
+  }
   switch (props.elementType) {
     case "input":
       inputElement = (
@@ -60,7 +67,9 @@ export default function Input(props) {
   return (
     <div className={classes.Input}>
       <label className={classes.Labels}>{props.label}</label>
+
       {inputElement}
+      {validationError}
     </div>
   );
 }
