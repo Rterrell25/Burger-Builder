@@ -2,7 +2,6 @@ import React from "react";
 import classes from "./Input.module.css";
 
 export default function Input(props) {
-  console.log(props);
   let inputElement = null;
   switch (props.elementType) {
     case "input":
@@ -11,6 +10,7 @@ export default function Input(props) {
           className={classes.inputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
       );
 
@@ -21,12 +21,17 @@ export default function Input(props) {
           className={classes.inputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
       );
       break;
     case "select":
       inputElement = (
-        <select className={classes.inputElement} value={props.value}>
+        <select
+          className={classes.inputElement}
+          value={props.value}
+          onChange={props.changed}
+        >
           {props.elementConfig.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -42,6 +47,7 @@ export default function Input(props) {
           className={classes.inputElement}
           {...props.elementConfig}
           value={props.value}
+          onChange={props.changed}
         />
       );
   }
