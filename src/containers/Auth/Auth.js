@@ -6,12 +6,27 @@ export default class Auth extends Component {
       email: {
         elementType: "input",
         elementConfig: {
-          type: "text",
-          placeholder: "Name"
+          type: "email",
+          placeholder: "Email"
         },
         value: "",
         validation: {
-          required: true
+          required: true,
+          isEmail: true
+        },
+        valid: false,
+        touch: false
+      },
+      password: {
+        elementType: "input",
+        elementConfig: {
+          type: "password",
+          placeholder: "Password"
+        },
+        value: "",
+        validation: {
+          required: true,
+          minLength: 6
         },
         valid: false,
         touch: false
