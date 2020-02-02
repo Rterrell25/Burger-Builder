@@ -36,9 +36,9 @@ export default class Auth extends Component {
     }
   };
   render() {
-    const fromElementsArray = [];
+    const formElementsArray = [];
     for (let key in this.state.orderForm) {
-      fromElementsArray.push({
+      formElementsArray.push({
         id: key,
         config: this.state.orderForm[key]
       });
