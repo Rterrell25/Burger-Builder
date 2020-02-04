@@ -9,4 +9,6 @@ export {
   purchaseBurger,
   purchaseInit,
   fetchOrders
-} from "./order.js";
+} from "./order";
+
+export { auth } from "./auth";
