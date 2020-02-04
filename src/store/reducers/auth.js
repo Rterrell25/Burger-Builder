@@ -3,7 +3,6 @@ import { updateObject } from "../utility";
 
 const initialState = {
   token: null,
-
   userId: null,
   error: null,
   loading: false
@@ -28,15 +27,15 @@ const authFail = (state, action) => {
     loading: false
   });
 };
-const reducer = (state, action) => {
+
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START:
-      authStart(state, action);
+      return authStart(state, action);
     case actionTypes.AUTH_SUCCESS:
-      authSuccess(state, action);
+      return authSuccess(state, action);
     case actionTypes.AUTH_FAIL:
-      authFail(state, action);
-
+      return authFail(state, action);
     default:
       return state;
   }
