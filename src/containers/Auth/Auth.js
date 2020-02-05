@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
+import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Auth.module.css";
 import * as actions from "../../store/actions/index";
-import Spinner from "../../components/UI/Spinner/Spinner";
-import { connect } from "react-redux";
 
 class Auth extends Component {
   state = {
@@ -14,7 +15,7 @@ class Auth extends Component {
         elementType: "input",
         elementConfig: {
           type: "email",
-          placeholder: "Email"
+          placeholder: "Mail Address"
         },
         value: "",
         validation: {
@@ -22,7 +23,7 @@ class Auth extends Component {
           isEmail: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       password: {
         elementType: "input",
@@ -36,23 +37,36 @@ class Auth extends Component {
           minLength: 6
         },
         valid: false,
-        touch: false
+        touched: false
       }
     },
     isSignup: true
   };
 
+  componentDidMount() {
+    if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
+      this.props.onSetAuthRedirectPath();
+    }
+  }
+
   checkValidity(value, rules) {
     let isValid = true;
+    if (!rules) {
+      return true;
+    }
+
     if (rules.required) {
       isValid = value.trim() !== "" && isValid;
     }
+
     if (rules.minLength) {
       isValid = value.length >= rules.minLength && isValid;
     }
+
     if (rules.maxLength) {
       isValid = value.length <= rules.maxLength && isValid;
     }
+
     if (rules.isEmail) {
       const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
       isValid = pattern.test(value) && isValid;
@@ -62,6 +76,7 @@ class Auth extends Component {
       const pattern = /^\d+$/;
       isValid = pattern.test(value) && isValid;
     }
+
     return isValid;
   }
 
@@ -113,9 +128,8 @@ class Auth extends Component {
         value={formElement.config.value}
         invalid={!formElement.config.valid}
         shouldValidate={formElement.config.validation}
-        changed={event => this.inputChangedHandler(event, formElement.id)}
         touched={formElement.config.touched}
-        errorMessage={this.errorMessageHandler}
+        changed={event => this.inputChangedHandler(event, formElement.id)}
       />
     ));
 
@@ -128,27 +142,27 @@ class Auth extends Component {
     if (this.props.error) {
       errorMessage = <p>{this.props.error.message}</p>;
     }
+
     let authRedirect = null;
     if (this.props.isAuthenticated) {
-      authRedirect = <Redirect to="/" />;
+      authRedirect = <Redirect to={this.props.authRedirectPath} />;
     }
+
     return (
       <div className={classes.Auth}>
         {authRedirect}
         {errorMessage}
         {this.state.isSignup ? (
-          <p>Sign Up For an Account Now!</p>
+          <p className={classes.auth}>Sign Up For an Account Now!</p>
         ) : (
-          <p>Sign In to an Existing Account</p>
+          <p className={classes.auth}>Sign In to an Existing Account</p>
         )}
-
         <form onSubmit={this.submitHandler}>
           {form}
-          <Button btnType="Success">Submit</Button>
+          <Button btnType="Success">SUBMIT</Button>
         </form>
-
         <Button clicked={this.switchAuthModeHandler} btnType="Danger">
-          Switch {this.state.isSignup ? "Sign In" : "Sign Up"}
+          Switch To {this.state.isSignup ? "Sign In" : "Sign Up"}
         </Button>
       </div>
     );
@@ -159,14 +173,17 @@ const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    isAuthenticated: state.auth.token !== null
+    isAuthenticated: state.auth.token !== null,
+    buildingBurger: state.burgerBuilder.building,
+    authRedirectPath: state.auth.authRedirectPath
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (email, password, isSignup) =>
-      dispatch(actions.auth(email, password, isSignup))
+      dispatch(actions.auth(email, password, isSignup)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
   };
 };
 
