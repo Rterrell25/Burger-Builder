@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import classes from "./Auth.module.css";
@@ -127,13 +128,25 @@ class Auth extends Component {
     if (this.props.error) {
       errorMessage = <p>{this.props.error.message}</p>;
     }
+    let authRedirect = null;
+    if (this.props.isAuthenticated) {
+      authRedirect = <Redirect to="/" />;
+    }
     return (
       <div className={classes.Auth}>
+        {authRedirect}
         {errorMessage}
+        {this.state.isSignup ? (
+          <p>Sign Up For an Account Now!</p>
+        ) : (
+          <p>Sign In to an Existing Account</p>
+        )}
+
         <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="Success">Submit</Button>
         </form>
+
         <Button clicked={this.switchAuthModeHandler} btnType="Danger">
           Switch {this.state.isSignup ? "Sign In" : "Sign Up"}
         </Button>
@@ -145,7 +158,8 @@ class Auth extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
+    isAuthenticated: state.auth.token !== null
   };
 };
 
