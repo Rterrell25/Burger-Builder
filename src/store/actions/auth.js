@@ -42,14 +42,13 @@ export const auth = (email, password, isSignup) => {
       password: password,
       returnSecureToken: true
     };
-    let url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtU3YXmGDcUYNVKrlzB8fQN6-DKgLlhBI";
+    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtU3YXmGDcUYNVKrlzB8fQN6-DKgLlhBI`;
     if (!isSignup) {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtU3YXmGDcUYNVKrlzB8fQN6-DKgLlhBI";
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtU3YXmGDcUYNVKrlzB8fQN6-DKgLlhBI`;
     }
     axios
       .post(url, authData)
+
       .then(response => {
         console.log(response);
         dispatch(authSuccess(response.data.idToken, response.data.localId));
