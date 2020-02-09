@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
@@ -7,6 +8,7 @@ import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../../store/actions/index";
+import { updateObject, checkValidity } from "../../../shared/utility";
 
 class ContactData extends Component {
   state = {
@@ -15,14 +17,14 @@ class ContactData extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Name"
+          placeholder: "Your Name"
         },
         value: "",
         validation: {
           required: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       street: {
         elementType: "input",
@@ -35,16 +37,15 @@ class ContactData extends Component {
           required: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       zipCode: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Postal Code"
+          placeholder: "ZIP Code"
         },
         value: "",
-
         validation: {
           required: true,
           minLength: 5,
@@ -52,7 +53,7 @@ class ContactData extends Component {
           isNumeric: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       country: {
         elementType: "input",
@@ -65,13 +66,13 @@ class ContactData extends Component {
           required: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       email: {
         elementType: "input",
         elementConfig: {
           type: "email",
-          placeholder: "E-mail"
+          placeholder: "Your E-Mail"
         },
         value: "",
         validation: {
@@ -79,7 +80,7 @@ class ContactData extends Component {
           isEmail: true
         },
         valid: false,
-        touch: false
+        touched: false
       },
       deliveryMethod: {
         elementType: "select",
@@ -89,8 +90,8 @@ class ContactData extends Component {
             { value: "cheapest", displayValue: "Cheapest" }
           ]
         },
-        validation: {},
         value: "fastest",
+        validation: {},
         valid: true
       }
     },
@@ -112,63 +113,44 @@ class ContactData extends Component {
       orderData: formData,
       userId: this.props.userId
     };
+
     this.props.onOrderBurger(order, this.props.token);
   };
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-    if (rules.isEmail) {
-      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test(value) && isValid;
-    }
-
-    if (rules.isNumeric) {
-      const pattern = /^\d+$/;
-      isValid = pattern.test(value) && isValid;
-    }
-    return isValid;
-  }
   inputChangedHandler = (event, inputIdentifier) => {
-    const updatedOrderForm = {
-      ...this.state.orderForm
-    };
-    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
+    const updatedFormElement = updateObject(
+      this.state.orderForm[inputIdentifier],
+      {
+        value: event.target.value,
+        valid: checkValidity(
+          event.target.value,
+          this.state.orderForm[inputIdentifier].validation
+        ),
+        touched: true
+      }
     );
-    updatedFormElement.touched = true;
-    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [inputIdentifier]: updatedFormElement
+    });
 
     let formIsValid = true;
     for (let inputIdentifier in updatedOrderForm) {
       formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
     }
-
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   };
 
   render() {
-    const fromElementsArray = [];
+    const formElementsArray = [];
     for (let key in this.state.orderForm) {
-      fromElementsArray.push({
+      formElementsArray.push({
         id: key,
         config: this.state.orderForm[key]
       });
     }
     let form = (
-      <form>
-        {fromElementsArray.map(formElement => (
+      <form onSubmit={this.orderHandler}>
+        {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
             elementType={formElement.config.elementType}
@@ -176,17 +158,12 @@ class ContactData extends Component {
             value={formElement.config.value}
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
-            changed={event => this.inputChangedHandler(event, formElement.id)}
             touched={formElement.config.touched}
-            errorMessage={this.errorMessageHandler}
+            changed={event => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
-        <Button
-          btnType="Success"
-          clicked={this.orderHandler}
-          disabled={!this.state.formIsValid}
-        >
-          Order
+        <Button btnType="Success" disabled={!this.state.formIsValid}>
+          ORDER
         </Button>
       </form>
     );
@@ -195,7 +172,7 @@ class ContactData extends Component {
     }
     return (
       <div className={classes.ContactData}>
-        <h4>Enter Your Contact Data</h4>
+        <h4>Enter your Contact Data</h4>
         {form}
       </div>
     );
@@ -218,6 +195,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(actions.purchaseBurger(orderData, token))
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
